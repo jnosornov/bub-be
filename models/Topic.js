@@ -3,7 +3,9 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 var topicSchema = new Schema({
-  matter: String
+  slug: String,
+  matter: String,
+  createdOn: Date
 })
 
 var Topic = mongoose.model("Topic", topicSchema)
