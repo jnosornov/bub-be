@@ -4,9 +4,9 @@ const router = express.Router()
 const Comment = require('../../models/Comment')
 
 router.post('/comment', (req, res) => {
-  const { description } = req.body
+  const { description, messageSlug } = req.body
 
-  Comment.create({ description }, function (err, comment) {
+  Comment.create({ description, messageSlug, createdOn: new Date() }, function (err, comment) {
     if(err) return res.status(500).send({ message: 'comment couldnt be created' })
 
     console.log('comment', comment)
