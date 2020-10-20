@@ -3,7 +3,9 @@ const { Schema } = mongoose
 
 var messageSchema = new Schema({
   slug: String,
-  description: String
+  description: String,
+  topicSlug: String,
+  createdOn: Date
 })
 
 var Message = mongoose.model("Message", messageSchema)

@@ -4,9 +4,9 @@ const router = express.Router()
 const Message = require('../../models/Message')
 
 router.post('/message', (req, res) => {
-  const { slug, description } = req.body
+  const { slug, description, topicSlug } = req.body
 
-  Message.create({ slug, description }, function (err, message) {
+  Message.create({ slug, description, topicSlug, createdOn: new Date() }, function (err, message) {
     if(err) return res.status(500).send({ message: 'message couldnt be created' })
 
     console.log('message', message)
