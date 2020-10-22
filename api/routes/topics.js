@@ -15,11 +15,19 @@ router.get('/topic/:slug', (req, res) => {
   })
 })
 
+router.get('/topic', (req, res) => {
+  Topic.find({ }, function (err, topics) {
+    if(err) return res.status(500).send({ message: 'no topics were found' })
+
+    res.send({ topics })
+  })
+})
+
 router.post('/topic', (req, res) => {
   const { matter } = req.body
   const slug = matter.replace(/ /g, '-')
 
-  Topic.create({ slug, matter, createdOn: new Date() }, function (err, topic) {
+  Topic.create({ slug, matter, nickname: 'Deadpool', createdOn: new Date() }, function (err, topic) {
     if(err) return res.status(500).send({ message: 'topic couldnt be created'})
 
     console.log('topic', topic)
