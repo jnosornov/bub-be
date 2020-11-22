@@ -9,7 +9,7 @@ const dbUri = 'mongodb://localhost:27017/connectionTest'
 connectDB(dbUri)
 
 const app = express()
-const port = 3000
+const PORT = 3000
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,10 +17,6 @@ app.use(bodyParser.json())
 
 app.use('/api', require('./api/routes'))
 
-app.get('/', (req, res) => {
-  res.send('Hello Stranger')
-})
-
-app.listen(port, () => {
-  console.log(`app running on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`app running on port ${PORT}`)
 })

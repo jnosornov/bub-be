@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 var commentSchema = new Schema({
-  description: String,
-  messageSlug: String,
+  text: String,
+  topicId: String,
+  commentId: String,
   createdOn: Date
 })
 

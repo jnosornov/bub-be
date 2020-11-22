@@ -5,7 +5,7 @@ const { Schema } = mongoose
 var topicSchema = new Schema({
   slug: String,
   matter: String,
-  nickname: String,
+  body: String,
   createdOn: Date
 })
 

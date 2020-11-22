@@ -1,38 +1,46 @@
 const express = require('express')
 const router = express.Router()
 
-const Topic = require('../../models/Topic')
+const getTopicBySlug = require('../services/getTopicBySlug')
+const createTopic = require('../services/createTopic')
+const listTopics = require('../services/listTopics')
 
-router.get('/topic/:slug', (req, res) => {
+router.get('/topic/:slug', async (req, res) => {
   const { slug } = req.params
 
-  Topic.findOne({ slug }, function (err, topic) {
-    if(err) return res.status(500).send({ message: 'topic couldnt be found' })
-
-    if(!topic) return res.status(404).send({ message: 'topic couldnt be found' })
-
-    res.send({ topic })
-  })
+  try {
+    const topic = await getTopicBySlug(slug)
+    res.status(200).send(topic)
+  } catch(error) {
+    res.status(500).send({
+      message: 'failed to retrieve topic',
+      error
+    })
+  }
 })
 
-router.get('/topic', (req, res) => {
-  Topic.find({ }, function (err, topics) {
-    if(err) return res.status(500).send({ message: 'no topics were found' })
-
-    res.send({ topics })
-  })
+router.get('/topic', async (req, res) => {
+  try {
+    const topics = await listTopics()
+    res.status(200).send({ topics })
+  } catch(err) {
+    res.status(500).send({ message: 'failed to retrieve topics' })
+  }
 })
 
-router.post('/topic', (req, res) => {
-  const { matter } = req.body
+router.post('/topic', async (req, res) => {
+  const { matter, body, createdOn } = req.body
   const slug = matter.replace(/ /g, '-')
 
-  Topic.create({ slug, matter, nickname: 'Deadpool', createdOn: new Date() }, function (err, topic) {
-    if(err) return res.status(500).send({ message: 'topic couldnt be created'})
-
-    console.log('topic', topic)
-    res.send({ message: 'topic created' })
-  })
+  const newTopic = { slug, matter, body, createdOn }
+  
+  try {
+    await createTopic(newTopic)
+    console.log(topic)
+    res.status(200).send({ message: 'topic created' })
+  } catch(err) {
+    res.status(500).send({ message: 'failed to create topic' })
+  }
 })
 
 module.exports = router

@@ -1,17 +1,21 @@
 const express = require('express')
 const router = express.Router()
 
-const Comment = require('../../models/Comment')
+const createComment = require('../services/createComment')
 
-router.post('/comment', (req, res) => {
-  const { description, messageSlug } = req.body
+router.post('/comment', async (req, res) => {
+  const { text, topicId, commentId, createdOn } = req.body
+  const newComment = { text, topicId, commentId, createdOn }
 
-  Comment.create({ description, messageSlug, createdOn: new Date() }, function (err, comment) {
-    if(err) return res.status(500).send({ message: 'comment couldnt be created' })
-
-    console.log('comment', comment)
-    res.send({ message: 'comment created' })
-  })
+  try {
+    await createComment(newComment)
+    res.status(200).send({ message: 'comment created' })
+  } catch(error) {
+    res.status(500).send({
+      message: 'failed to create comment',
+      error
+    })
+  }
 })
 
 module.exports = router
